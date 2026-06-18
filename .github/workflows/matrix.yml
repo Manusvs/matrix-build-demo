@@ -1,0 +1,42 @@
+name: Matrix Build Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os:
+          - ubuntu-20.04
+          - ubuntu-22.04
+
+        python-version:
+          - "3.10"
+          - "3.11"
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Display Environment
+        run: |
+          echo "Operating System: ${{ matrix.os }}"
+          echo "Python Version: ${{ matrix.python-version }}"
+          python --version
+
+      - name: Run Python Program
+        run: |
+          python app.py
